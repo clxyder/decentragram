@@ -28,21 +28,22 @@ contract('Decentragram', ([deployer, author, tipper]) => {
 
   describe('images', async () => {
     let result, imageCount
-    const hash = 'QmV8cfu6n4NT5xRr2AHdKxFMTZEJrA44qgrBCr739BN9Wb'
+    const hash = 'abc123'
+    const desc = 'Image description'
 
     before(async () => {
-      result = await decentragram.uploadImage(hash, 'Image description', { from: author })
+      result = await decentragram.uploadImage(hash, desc, { from: author })
       imageCount = await decentragram.imageCount()
     })
 
-    //check event
+    // //check event
     it('creates images', async () => {
-      // SUCESS
+      // SUCCESS
       assert.equal(imageCount, 1)
       const event = result.logs[0].args
       assert.equal(event.id.toNumber(), imageCount.toNumber(), 'id is correct')
       assert.equal(event.hash, hash, 'Hash is correct')
-      assert.equal(event.description, 'Image description', 'description is correct')
+      assert.equal(event.description, desc, 'description is correct')
       assert.equal(event.tipAmount, '0', 'tip amount is correct')
       assert.equal(event.author, author, 'author is correct')
 
@@ -54,12 +55,12 @@ contract('Decentragram', ([deployer, author, tipper]) => {
       await decentragram.uploadImage('Image hash', '', { from: author }).should.be.rejected;
     })
 
-    //check from Struct
+    // //check from Struct
     it('lists images', async () => {
       const image = await decentragram.images(imageCount)
       assert.equal(image.id.toNumber(), imageCount.toNumber(), 'id is correct')
       assert.equal(image.hash, hash, 'Hash is correct')
-      assert.equal(image.description, 'Image description', 'description is correct')
+      assert.equal(image.description, desc, 'description is correct')
       assert.equal(image.tipAmount, '0', 'tip amount is correct')
       assert.equal(image.author, author, 'author is correct')
     })
@@ -76,7 +77,7 @@ contract('Decentragram', ([deployer, author, tipper]) => {
       const event = result.logs[0].args
       assert.equal(event.id.toNumber(), imageCount.toNumber(), 'id is correct')
       assert.equal(event.hash, hash, 'Hash is correct')
-      assert.equal(event.description, 'Image description', 'description is correct')
+      assert.equal(event.description, desc, 'description is correct')
       assert.equal(event.tipAmount, '1000000000000000000', 'tip amount is correct')
       assert.equal(event.author, author, 'author is correct')
 
